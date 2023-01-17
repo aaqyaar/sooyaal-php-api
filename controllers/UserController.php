@@ -16,7 +16,7 @@ class UserController {
                 break;
 
             case 'POST':
-                $response = $this->loginUserFromRequest();
+                $response = $this->createUserFromRequest();
                 break;
            
         }
@@ -48,16 +48,5 @@ class UserController {
         $response['body'] = $result;
         return $response;
     }
-    private function loginUserFromRequest() {
-        $input = (array) json_decode(file_get_contents('php://input'), TRUE);
-       $email = $input['email'];
-         $password = $input['password'];
-         if (! isset($email) || ! isset($password)) {
-             return false;
-         }
-        $result = $this->gateway->login($email, $password);
-        $response['status_code_header'] = 'HTTP/1.1 200 Success';
-        $response['body'] = $result;
-        return $response;
-    }
+   
 }
