@@ -102,6 +102,27 @@ class UserGateway {
         }
     }
 
+    public function login($email, $password) {
+        if (! isset($email) || ! isset($password)) {
+            return array("status" => false, "message" => "Invalid Data");
+        }
+        
+        // check if the email already exists
+        $isExist = $this->findUserByEmail($email);
+        // data is not empty
+        if (count($isExist['data']) == 0) {
+            return array("status" => false, "message" => "Email Does Not Exist");
+        }
+        // check if the password is correct
+        $hashedPassword = $isExist['data'][0]['password'];
+        if (! password_verify($password, $hashedPassword)) {
+            return array("status" => false, "message" => "Invalid Password");
+        }
+        // return the user
+        return array("status" => true, "data" => $isExist['data'][0]);
+
+    }
+
     private function findUserByEmail($email) {
         $query = "SELECT * FROM USERS WHERE email = '$email'";
         try {

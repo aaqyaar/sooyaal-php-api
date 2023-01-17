@@ -18,11 +18,14 @@ $uri = explode( '/', $_SERVER["REQUEST_URI"]);
 // // all of our endpoints start with /users
 // // everything else results in a 404 Not Found
 
+// if uri[3] not includes users  then return 404
+
 if ($uri[3] != 'users.php') {
     header("HTTP/1.1 404 Not Found");
     http_response_code(404);
     exit();
 }
+
 
 // // the user id is, of course, optional and must be a number:
 $userId = null;
