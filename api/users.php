@@ -1,34 +1,44 @@
 <?php
-
-header("Content-Type: application/json");
-
+// use controllers\UserController;
 include '../conn.php';
+include '../gateways/UserGateway.php';
+include '../controllers/UserController.php';
 
-function getUsers($conn) {
-    $sql = "SELECT * FROM USERS";
-    $result = $conn->query($sql);
-    $users = array();
-    $data = array();
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $users[] = $row;
-        }
-    }
-    if ($result) {
-        $data = array("status" => true, "data" => $users);
-    } else {
-        $data = array("status" => false, "data" => "No Data Found");
-    }
-    echo json_encode($data);
+
+
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+
+
+$uri = explode( '/', $_SERVER["REQUEST_URI"]);
+// // all of our endpoints start with /users
+// // everything else results in a 404 Not Found
+
+if ($uri[3] != 'users.php') {
+    header("HTTP/1.1 404 Not Found");
+    http_response_code(404);
+    exit();
 }
 
-// if(isset($_POST['action'])){
-//     $action = $_POST['action'];
-//     // execute the fundtion that we requested
-//     $action($conn);
-// }else{
-//     echo json_encode(array("status" => false, "data" => "Action Required...",  "post"=>$_POST));
-// }
-getUsers($conn);
+// // the user id is, of course, optional and must be a number:
+$userId = null;
+if (isset($uri[4])) {
+    $userId = (int) $uri[4];
+}
 
+
+$requestMethod = $_SERVER["REQUEST_METHOD"];
+
+// // pass the request method and user ID to the UserController and process the HTTP request:
+$gateway = new UserGateway($conn);
+
+$controller = new UserController($gateway);
+
+$controller->processRequest($requestMethod, $userId);
+
+?>
 

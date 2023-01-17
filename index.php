@@ -1,7 +1,17 @@
+<html>
 
-<?php
+    <head>
+    <link rel="stylesheet" href="styles/style.php" media="screen">
+    </head>
+    <body>
 
-echo "Hello World";
-?>
-
-<h4>Output</h4>
+        <div class="container">
+            <h1>
+                PHP Back-end API for Sooyaal
+            </h1>
+            <p>
+            Sooyaal is a social media platform that allows users to share their thoughts and ideas with the world.             
+            </p>
+        </div>
+    </body>
+</html>
